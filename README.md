@@ -25,4 +25,21 @@ vm-attach machine-name [USB IDs] [v]
 
 ### Guest
 
-In the guest you need a connection to `/run/vm-hid.sock`. In order to do that, you need to add a serial port
+In the guest you need a connection to `/run/vm-hid.sock`. In order to do that, you need to add a serial port:
+
+![virt-manager screenshot](https://github.com/caiofreitaso/vm-hid/blob/master/img/serial.png)
+
+You may call a PowerShell script
+
+```
+    function detach-device
+    {
+        $port = New-Object System.IO.Ports.SerialPort COM1,115200,None,8
+        $port.Open()
+        $port.WriteLine("d vm_name " + $args[0])
+        $port.Close()
+    }
+
+    detach-device "vendor:device"
+    detach-device "vendor:device"
+```
