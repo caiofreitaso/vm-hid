@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Usage:
+#    vm-attach [####:#### ...] [v]
+#
+#    ####:####    list of all USB devices' IDs to attach
+#    v            flag to turn off video signal of display :0.0
+
+echo 'a $@' | socat - UNIX-CONNECT:/run/vm-hid.sock

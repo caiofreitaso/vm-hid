@@ -1,0 +1,8 @@
+[Unit]
+Description=VM-HID server socket
+
+[Socket]
+ListenStream=/run/vm-hid.sock
+
+[Install]
+WantedBy=default.target

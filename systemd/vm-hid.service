@@ -1,0 +1,8 @@
+[Unit]
+Description=VM-HID server
+
+[Service]
+ExecStart=/usr/local/bin/vm-hid
+
+[Install]
+WantedBy=multi-user.target
