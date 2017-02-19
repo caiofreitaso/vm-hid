@@ -11,7 +11,15 @@ This is a server that connects to **libvirt** in order to attach or detach USB d
 
 ## Usage
 
-### Host
+### Daemon
+```
+   sudo make install
+```
+Compiles and installs all socket & service files.
+
+### Scripts
+
+#### Host
 
 In the host you can just call the script:
 
@@ -23,23 +31,36 @@ vm-attach machine-name [USB IDs] [v]
 * **USB-IDs**: Optional argument for the list of USB devices to attach to target VM. USB ID are eight hexadecimal digits is in the format: `####:####`
 * **v**: Optional argument to turn off video signal at display :0.0
 
-### Guest
+#### Guest
 
 In the guest you need a connection to `/run/vm-hid.sock`. In order to do that, you need to add a serial port:
 
 ![virt-manager screenshot](https://github.com/caiofreitaso/vm-hid/blob/master/img/serial.png)
 
-You may call a PowerShell script
+You may call a PowerShell script:
 
 ```
     function detach-device
     {
         $port = New-Object System.IO.Ports.SerialPort COM1,115200,None,8
         $port.Open()
-        $port.WriteLine("d vm_name " + $args[0])
+        $port.Write("d machine-name")
+        foreach ($a in $args)
+        {
+     	    $port.Write($a)
+        }
+        $port.WriteLine("")
         $port.Close()
     }
 
-    detach-device "vendor:device"
-    detach-device "vendor:device"
+    detach-device ####:#### ####:#### v
+```
+
+> For a port at COM1, with 115200 bits per second, no parity & 8 data bits.
+
+
+Or a bash script:
+
+```
+    echo 'd machine-name ####:#### ####:#### v' | socat -
 ```
